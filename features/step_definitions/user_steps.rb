@@ -1,3 +1,5 @@
+require './lib/youtube/youtube_search'
+
 Given /^I have an avatar image at "([^"]*)"$/ do |link|
   @avatar_link = link
 end
@@ -40,8 +42,9 @@ Given /user "([^"]*)" has joined on "([^"]*)"/ do |user_name, date|
   user.save!
 end
 
-Given /user "([^"]*)" has videos in playlist "([^"]*)" / do |user, playlist|
-      pending
+Given /^user "([^"]*)" has YouTube account id "([^"]*)" with some videos in it/ do |user, account_id|
+  @user_youtube_id = account_id
+  @youtube_user_response_xml = File.read('spec/fixtures/youtube_user_response.xml')
 end
 
 ### WHEN ###
@@ -194,7 +197,10 @@ Then /^my account should be deleted$/ do
 end
 
 Then /I should see a list of videos for user "([^"]*)"/ do |user|
-  pending
+  response = YoutubeSearch.user_videos(@user_youtube_id)
+  correct_number = YoutubeSearch.parse(@youtube_user_response_xml).count
+  video_links = page.find(:xpath, "//a[@src='http://www.youtube.com/watch']")
+  expect(video_links).to have(correct_number).items
 end
 
 
