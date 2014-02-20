@@ -27,8 +27,8 @@ describe('Affixed Navbar', function() {
 //            expect(affixedNav).toHaveClass('affix');
 //        });
         it('pads the margin bottom appropriately', function(){
-          spyOn(window, 'parseInt').and.callFake(function(){return 5;});
-          expect(header).toHaveCss({'margin-bottom': 55});
+          spyOn(affixedNav.fn, 'css').and.callFake(function(){return '5px';});
+          expect(header).toHaveCss({'margin-bottom': 55px});
         });
     });
 //    describe('scrolling back up', function() {
